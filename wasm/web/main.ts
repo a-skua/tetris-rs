@@ -33,6 +33,14 @@ const rendering = (tetris: Tetris, ctx: CanvasRenderingContext2D) => {
 const createPointElement = (point: number) =>
   document.createTextNode(`point: ${point}`);
 
+const createButtonElement = (name: string, f: (e: Event) => void) => {
+  const button = document.createElement("button");
+  button.appendChild(document.createTextNode(name));
+  button.addEventListener("click", f);
+  button.style.setProperty("margin", "0 1ex");
+  return button;
+};
+
 export default () =>
   init().then(() => {
     const tetris = Tetris.new();
@@ -42,6 +50,27 @@ export default () =>
     canvas.height = tetris.size_y() * block_size;
     canvas.style.setProperty("border", "solid");
     document.body.appendChild(canvas);
+
+    const ctrl = document.createElement("div");
+    ctrl.appendChild(
+      createButtonElement("←", () => tetris.input(JsInput.MoveLeft)),
+    );
+    ctrl.appendChild(
+      createButtonElement("↓", () => tetris.input(JsInput.MoveBottom)),
+    );
+    ctrl.appendChild(
+      createButtonElement("↑", () => tetris.input(JsInput.MoveTop)),
+    );
+    ctrl.appendChild(
+      createButtonElement("→", () => tetris.input(JsInput.MoveRight)),
+    );
+    ctrl.appendChild(
+      createButtonElement("[", () => tetris.input(JsInput.RotateLeft)),
+    );
+    ctrl.appendChild(
+      createButtonElement("]", () => tetris.input(JsInput.RotateRight)),
+    );
+    document.body.appendChild(ctrl);
 
     const info = document.createElement("div");
     info.appendChild(

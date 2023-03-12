@@ -346,6 +346,13 @@ var rendering = (tetris, ctx) => {
   console.log(tetris.to_string());
 };
 var createPointElement = (point) => document.createTextNode(`point: ${point}`);
+var createButtonElement = (name, f) => {
+  const button = document.createElement("button");
+  button.appendChild(document.createTextNode(name));
+  button.addEventListener("click", f);
+  button.style.setProperty("margin", "0 1ex");
+  return button;
+};
 var main_default = () => wasm_default().then(() => {
   const tetris = Tetris.new();
   const canvas = document.createElement("canvas");
@@ -353,6 +360,26 @@ var main_default = () => wasm_default().then(() => {
   canvas.height = tetris.size_y() * block_size;
   canvas.style.setProperty("border", "solid");
   document.body.appendChild(canvas);
+  const ctrl = document.createElement("div");
+  ctrl.appendChild(
+    createButtonElement("\u2190", () => tetris.input(JsInput.MoveLeft))
+  );
+  ctrl.appendChild(
+    createButtonElement("\u2193", () => tetris.input(JsInput.MoveBottom))
+  );
+  ctrl.appendChild(
+    createButtonElement("\u2191", () => tetris.input(JsInput.MoveTop))
+  );
+  ctrl.appendChild(
+    createButtonElement("\u2192", () => tetris.input(JsInput.MoveRight))
+  );
+  ctrl.appendChild(
+    createButtonElement("[", () => tetris.input(JsInput.RotateLeft))
+  );
+  ctrl.appendChild(
+    createButtonElement("]", () => tetris.input(JsInput.RotateRight))
+  );
+  document.body.appendChild(ctrl);
   const info = document.createElement("div");
   info.appendChild(
     document.createTextNode("\u2190: h / \u2193: j or k / \u2192: l / rotate: p, n, [ or ]")
